@@ -1,0 +1,7 @@
+.place {
+  max-width: 282px;
+  min-height: 355px;
+  object-fit: contain;
+  background: #ffffff;
+  border-radius: 10px;
+}
