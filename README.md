@@ -5,4 +5,4 @@
 **Технологии**
 Адаптация под разные разрещения при помощи Grid Layout, Flexbox. Возможность редаквтирования данных пользователя при помощи Popup и JavaScript.
 **Ссылка на сайт**
-https://igorbibikov.github.io/russian-travel/index.html
+https://igorbibikov.github.io/mesto/
