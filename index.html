@@ -18,14 +18,14 @@
           <div class="profile__info">
             <div class="profile__title">
               <h1 class="profile__name">Жак-Ив Кусто</h1>
-              <button class="edit-button"></button>
+              <button class="profile__edit-button" type="button"></button>
             </div>
             <p class="profile__subtitle">Иасследователь океан</p>
           </div>
-          <button class="add-button"></button>
+          <button class="profile__add-button" type="button"></button>
         </section>
         <section class="places">
-          <div class="place">
+          <article class="place">
             <img
               src="./images/1.png"
               alt="Разрушенная церковь"
@@ -33,9 +33,9 @@
             />
             <div class="place__group">
               <h2 class="place__title">Карачаевск</h2>
-              <a href="#" class="place__like"></a>
+              <button type="button" class="place__like"></button>
             </div>
-          </div>
+          </article>
           <div class="place">
             <img
               src="./images/kirill-pershin-14046814-unsplash.png"
@@ -44,7 +44,7 @@
             />
             <div class="place__group">
               <h2 class="place__title">Гора Эльбрус</h2>
-              <a href="#" class="place__like"></a>
+              <button type="button" class="place__like"></button>
             </div>
           </div>
           <div class="place">
@@ -55,7 +55,7 @@
             />
             <div class="place__group">
               <h2 class="place__title">Домбай</h2>
-              <a href="#" class="place__like"></a>
+              <button type="button" class="place__like"></button>
             </div>
           </div>
           <div class="place">
@@ -66,7 +66,7 @@
             />
             <div class="place__group">
               <h2 class="place__title">Гора Эльбрус</h2>
-              <a href="#" class="place__like"></a>
+              <button type="button" class="place__like"></button>
             </div>
           </div>
           <div class="place">
@@ -77,7 +77,7 @@
             />
             <div class="place__group">
               <h2 class="place__title">Домбай</h2>
-              <a href="#" class="place__like"></a>
+              <button type="button" class="place__like"></button>
             </div>
           </div>
           <div class="place">
@@ -88,37 +88,38 @@
             />
             <div class="place__group">
               <h2 class="place__title">Карачаево-Черкесия</h2>
-              <a href="#" class="place__like"></a>
+              <button type="button" class="place__like"></button>
             </div>
           </div>
         </section>
       </main>
       <footer class="footer">
-        <p class="footer__copyright">&copy;2023 Mesto Russia</p>
+        <p class="footer__copyright">&copy; 2023 Mesto Russia</p>
       </footer>
     </div>
 
-    <div class="popup popup_closed">
-      <form action="#" class="popup__container">
+    <div class="popup">
+      <div class="popup__container">
+        <button type="button" class="popup__close-button"></button>
         <h2 class="popup__title">Редактировать профиль</h2>
-        <label for="name" class="popup__name-label">Имя</label
-        ><input
-          class="popup__name-input"
-          type="name"
-          name="Ваше имя"
-          id="name"
-          value="Жак-Ив Кусто"
-        />
-        <label for="text" class="popup__text-label">О себе</label
-        ><input
-          class="popup__text-input"
-          type="text"
-          id="text"
-          value="Иасследователь океан"
-        />
-        <button type="submit" class="popup__submit-button">Сохранить</button>
-        <a href="#" class="popup__close-button"></a>
-      </form>
+        <form action="#" name="formInput" class="popup__form">
+          <input
+            class="popup__input popup__input_name"
+            type="name"
+            name="Your name"
+            id="name"
+            value="Жак-Ив Кусто"
+          />
+          <input
+            class="popup__input popup__input_text"
+            type="text"
+            name="Your Occupation"
+            id="text"
+            value="Иасследователь океан"
+          />
+          <button type="submit" class="popup__submit-button">Сохранить</button>
+        </form>
+      </div>
     </div>
     <script src="./scripts/index.js"></script>
   </body>
