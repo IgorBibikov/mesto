@@ -1,7 +1,12 @@
 .place__foto {
   margin: 0;
   padding: 0;
-  max-width: 282px;
+  width: 282px;
+  height: 282px;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
+}
+
+.place__foto:hover {
+  cursor: pointer;
 }
