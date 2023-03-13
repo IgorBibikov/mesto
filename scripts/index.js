@@ -1,13 +1,16 @@
 const editProfileButton = document.querySelector('.profile__edit-button');
 const addPlaceButton = document.querySelector('.profile__add-button');
 
-const popupProfile = document.querySelector('.popup-profile');
-const popupCloseButton = document.querySelectorAll('.popup__close-button');
-const popupPlace = document.querySelector('.popup-place');
-const popupImage = document.querySelector('.popup-image');
+const popupProfile = document.querySelector('.popup_type_profile');
+const popupCloseButtons = document.querySelectorAll('.popup__close-button');
+const popupPlace = document.querySelector('.popup_type_place');
+const popupImage = document.querySelector('.popup_type_image');
 
-const bigFoto = document.querySelector('.popup-image__big-foto');
-const bigFotoTitle = document.querySelector('.popup-image__title');
+const placeTemplate = document.querySelector('.place-template').content;
+const cardsContainer = document.querySelector('.places');
+
+const bigFoto = document.querySelector('.popup__big-foto');
+const bigFotoTitle = document.querySelector('.popup__image-title');
 
 // Находим форму в DOM
 const formProfileElement = document.querySelector('.popup__form_type_profile');
@@ -24,113 +27,83 @@ const placeLinkInput = document.querySelector('.popup__input_type_link');
 const profileNameElement = document.querySelector('.profile__name');
 const profileOccupationElement = document.querySelector('.profile__subtitle');
 
-const placeNameElement = document.querySelector('.place__title');
-const placeLinkElement = document.querySelector('.place__foto');
-
 //Функция открытия popup
-function popupOpened(popup) {
+function openPopup(popup) {
   popup.classList.add('popup_opened');
+}
+
+// Функция закрытия popup
+function closePopup(popup) {
+  popup.classList.remove('popup_opened');
 }
 
 // Обработчик событий для открытия popup:
 editProfileButton.addEventListener('click', function () {
-  popupOpened(popupProfile);
+  openPopup(popupProfile);
   profileNameInput.value = profileNameElement.textContent;
   profileOccupationInput.value = profileOccupationElement.textContent;
 });
 addPlaceButton.addEventListener('click', function () {
-  popupOpened(popupPlace);
+  openPopup(popupPlace);
 });
 
-// Функция закрытия popup
-function popupClosed() {
-  popupProfile.classList.remove('popup_opened');
-  popupPlace.classList.remove('popup_opened');
-  popupImage.classList.remove('popup_opened');
-}
-
 // Обработчик событий для закрытия popup:
-popupCloseButton.forEach(function (CloseButton) {
-  CloseButton.addEventListener('click', popupClosed);
+popupCloseButtons.forEach(function (closeButton) {
+  const popup = closeButton.closest('.popup');
+  closeButton.addEventListener('click', function () {
+    closePopup(popup);
+  });
 });
 
 // Функция «отправки» формы профиля
-function handleFormSubmit(evt) {
+function handleFormSubmitProfile(evt) {
   evt.preventDefault();
-  popupClosed();
-  console.log('Форма отправлена');
+  closePopup(popupProfile);
 
   //Новые значения из input в profile
   profileNameElement.textContent = profileNameInput.value;
   profileOccupationElement.textContent = profileOccupationInput.value;
 }
 // Обработчик событий при отправке формы профиля:
-formProfileElement.addEventListener('submit', handleFormSubmit);
+formProfileElement.addEventListener('submit', handleFormSubmitProfile);
 
-// Массив данных карточек
-
-const initialCards = [
-  {
-    name: 'Архыз',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg',
-  },
-  {
-    name: 'Челябинская область',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg',
-  },
-  {
-    name: 'Иваново',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg',
-  },
-  {
-    name: 'Камчатка',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg',
-  },
-  {
-    name: 'Холмогорский район',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg',
-  },
-  {
-    name: 'Байкал',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg',
-  },
-];
-
-const places = document.querySelector('.places');
-// Функция добавления карточек
+// Функция создания карточек
 function createCard(card) {
-  const newCard = document
-    .querySelector('.place-template')
-    .content.cloneNode(true);
+  const newCard = placeTemplate.querySelector('.place').cloneNode(true);
   const placeTitle = newCard.querySelector('.place__title');
-  placeTitle.textContent = card.name;
-
   const placeFoto = newCard.querySelector('.place__foto');
+  const placeRemoveButtom = newCard.querySelector('.place__remove-button');
+  const imageButton = newCard.querySelector('.place__foto');
+  placeTitle.textContent = card.name;
   placeFoto.setAttribute('src', card.link);
   placeFoto.setAttribute('alt', `Фотография ${card.name}`);
-  const placeRemoveButtom = newCard.querySelector('.place__remove-button');
-  placeRemoveButtom.addEventListener('click', hendeleRemoveCard);
+  placeRemoveButtom.addEventListener('click', hendleRemoveCard);
   // ОТкрытие попап
-  const imageButton = newCard.querySelector('.place__foto');
   imageButton.addEventListener('click', function () {
-    popupOpened(popupImage);
+    openPopup(popupImage);
     bigFoto.setAttribute('src', card.link);
     bigFoto.setAttribute('alt', `Фотография ${card.name}`);
     bigFotoTitle.textContent = card.name;
   });
-
   newCard
     .querySelector('.place__like')
     .addEventListener('click', function (evt) {
       evt.target.classList.toggle('place__like_active');
-      console.log('НАЖАТ ЛАЙК');
     });
-  places.prepend(newCard);
+  return newCard;
+}
+//Функция добавления карточки
+function addCard(card, cardsContainer) {
+  const newCardElement = createCard(card);
+  cardsContainer.prepend(newCardElement);
 }
 
-initialCards.forEach(createCard);
+initialCards.forEach(function (data) {
+  addCard(data, cardsContainer);
+});
+
 // Функция удаления карточек
-function hendeleRemoveCard(event) {
+function hendleRemoveCard(event) {
   const button = event.target;
   const place = button.closest('.place');
   place.remove();
@@ -138,9 +111,6 @@ function hendeleRemoveCard(event) {
 // Функция «отправки» формы карточек
 function handleFormSubmitPlace(evt) {
   evt.preventDefault();
-  popupClosed();
-  console.log('Форма отправлена');
-
   //Новые значения из input в place
   const name = placeNameInput.value;
   const link = placeLinkInput.value;
@@ -148,7 +118,9 @@ function handleFormSubmitPlace(evt) {
     name: name,
     link: link,
   };
-  createCard(card);
+  addCard(card, cardsContainer);
+  closePopup(popupPlace);
+  formPlaceElement.reset();
 }
 // Обработчик событий при отправке формы профиля:
 
