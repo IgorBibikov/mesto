@@ -5,6 +5,7 @@ const popupProfile = document.querySelector('.popup_type_profile');
 const popupCloseButtons = document.querySelectorAll('.popup__close-button');
 const popupPlace = document.querySelector('.popup_type_place');
 const popupImage = document.querySelector('.popup_type_image');
+const popups = document.querySelectorAll('.popup');
 
 const placeTemplate = document.querySelector('.place-template').content;
 const cardsContainer = document.querySelector('.places');
@@ -47,11 +48,24 @@ addPlaceButton.addEventListener('click', function () {
   openPopup(popupPlace);
 });
 
-// Обработчик событий для закрытия popup:
+// Обработчик событий для закрытия popup по кнопке:
 popupCloseButtons.forEach(function (closeButton) {
   const popup = closeButton.closest('.popup');
   closeButton.addEventListener('click', function () {
     closePopup(popup);
+  });
+});
+// Обработчик событий для закрытия popup по оверлей ESC:
+popups.forEach(function (popup) {
+  popup.addEventListener('click', function (evt) {
+    if (evt.target === popup) {
+      closePopup(popup);
+    }
+  });
+  document.addEventListener('keydown', function (evt) {
+    if (evt.code === 'Escape') {
+      closePopup(popup);
+    }
   });
 });
 

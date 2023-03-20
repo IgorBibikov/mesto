@@ -12,4 +12,6 @@
   overflow: hidden;
   position: fixed;
   top: 0px;
+  cursor: pointer;
+  z-index: 1;
 }
