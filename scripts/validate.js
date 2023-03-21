@@ -15,12 +15,12 @@ const hideInputError = (errorTextElement, activeErrorClass) => {
 //Функция включения НЕАКТИВНОГО состояния кнопки
 const disableButton = (submitButton, invalidSubmitButtonClass) => {
   submitButton.classList.add(invalidSubmitButtonClass);
-  submitButton.desabled = true;
+  submitButton.disabled = true;
 };
 //Функция включения АКТИВНОГО состояния кнопки
-const enableButton = (submitButton, validSubmitButtonClass) => {
-  submitButton.classList.remove(validSubmitButtonClass);
-  submitButton.desabled = false;
+const enableButton = (submitButton, invalidSubmitButtonClass) => {
+  submitButton.classList.remove(invalidSubmitButtonClass);
+  submitButton.disabled = false;
 };
 // Функция проверки ИНПУТОВ формы на валидность
 const checkInputValidity = (
@@ -32,8 +32,7 @@ const checkInputValidity = (
   const errorTextElement = document.querySelector(
     `${errorClassTemplate}${input.name}`
   );
-  console.log(errorTextElement);
-  console.log(input);
+
   if (!input.validity.valid) {
     showInputError(errorTextElement, input.validationMessage, activeErrorClass);
     input.classList.add(inputErrorClass);

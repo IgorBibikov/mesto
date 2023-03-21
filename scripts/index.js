@@ -1,5 +1,5 @@
-const editProfileButton = document.querySelector('.profile__edit-button');
-const addPlaceButton = document.querySelector('.profile__add-button');
+const buttonEditProfile = document.querySelector('.profile__edit-button');
+const buttonAddPlace = document.querySelector('.profile__add-button');
 
 const popupProfile = document.querySelector('.popup_type_profile');
 const popupCloseButtons = document.querySelectorAll('.popup__close-button');
@@ -28,24 +28,39 @@ const placeLinkInput = document.querySelector('.popup__input_type_link');
 const profileNameElement = document.querySelector('.profile__name');
 const profileOccupationElement = document.querySelector('.profile__subtitle');
 
+// Функция закрытия попап по ESC
+function doSomething(evt) {
+  if (evt.code === 'Escape') {
+    const popupOpened = document.querySelector('.popup_opened');
+    closePopup(popupOpened);
+  }
+}
 //Функция открытия popup
 function openPopup(popup) {
   popup.classList.add('popup_opened');
+  document.addEventListener('keydown', doSomething);
 }
 
 // Функция закрытия popup
 function closePopup(popup) {
   popup.classList.remove('popup_opened');
+  document.removeEventListener('keydown', doSomething);
 }
-
+// Функция деактивирования кнопки сабмит
+function disableSubmitButton() {
+  const submitButton = formPlaceElement.querySelector('.popup__submit-button');
+  submitButton.classList.add('popup__submit-button_disabled');
+  submitButton.disabled = true;
+}
 // Обработчик событий для открытия popup:
-editProfileButton.addEventListener('click', function () {
-  openPopup(popupProfile);
+buttonEditProfile.addEventListener('click', function () {
   profileNameInput.value = profileNameElement.textContent;
   profileOccupationInput.value = profileOccupationElement.textContent;
+  openPopup(popupProfile);
 });
-addPlaceButton.addEventListener('click', function () {
+buttonAddPlace.addEventListener('click', function () {
   openPopup(popupPlace);
+  disableSubmitButton();
 });
 
 // Обработчик событий для закрытия popup по кнопке:
@@ -55,15 +70,11 @@ popupCloseButtons.forEach(function (closeButton) {
     closePopup(popup);
   });
 });
-// Обработчик событий для закрытия popup по оверлей ESC:
+
+// Обработчик событий для закрытия popup по оверлей:
 popups.forEach(function (popup) {
   popup.addEventListener('click', function (evt) {
     if (evt.target === popup) {
-      closePopup(popup);
-    }
-  });
-  document.addEventListener('keydown', function (evt) {
-    if (evt.code === 'Escape') {
       closePopup(popup);
     }
   });
@@ -72,11 +83,10 @@ popups.forEach(function (popup) {
 // Функция «отправки» формы профиля
 function handleFormSubmitProfile(evt) {
   evt.preventDefault();
-  closePopup(popupProfile);
-
   //Новые значения из input в profile
   profileNameElement.textContent = profileNameInput.value;
   profileOccupationElement.textContent = profileOccupationInput.value;
+  closePopup(popupProfile);
 }
 // Обработчик событий при отправке формы профиля:
 formProfileElement.addEventListener('submit', handleFormSubmitProfile);
@@ -135,6 +145,7 @@ function handleFormSubmitPlace(evt) {
   addCard(card, cardsContainer);
   closePopup(popupPlace);
   formPlaceElement.reset();
+  disableSubmitButton();
 }
 // Обработчик событий при отправке формы профиля:
 

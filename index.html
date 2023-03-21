@@ -24,24 +24,22 @@
           </div>
           <button class="profile__add-button" type="button"></button>
         </section>
-        <section class="places">
-          <template class="place-template">
-            <article class="place">
-              <button class="place__remove-button" type="button"></button>
-              <img src="#" alt="#" class="place__foto" />
-              <div class="place__group">
-                <h2 class="place__title">Карачаевск</h2>
-                <button type="button" class="place__like"></button>
-              </div>
-            </article>
-          </template>
-        </section>
+        <section class="places"></section>
       </main>
       <footer class="footer">
         <p class="footer__copyright">&copy; 2023 Mesto Russia</p>
       </footer>
     </div>
-
+    <template class="place-template">
+      <article class="place">
+        <button class="place__remove-button" type="button"></button>
+        <img src="#" alt="#" class="place__foto" />
+        <div class="place__group">
+          <h2 class="place__title">Карачаевск</h2>
+          <button type="button" class="place__like"></button>
+        </div>
+      </article>
+    </template>
     <div class="popup popup_type_profile">
       <div class="popup__container">
         <button type="button" class="popup__close-button"></button>
@@ -57,9 +55,9 @@
             name="name"
             id="name"
             value=""
-            required
             minlength="2"
             maxlength="40"
+            required
           />
           <span class="popup__input-error popup__input-error_type_name"></span>
           <input
@@ -68,9 +66,9 @@
             name="occupation"
             id="text"
             value=""
-            required
             minlength="2"
             maxlength="200"
+            required
           />
           <span
             class="popup__input-error popup__input-error_type_occupation"
@@ -95,9 +93,9 @@
             id="place-name"
             value=""
             placeholder="Название"
-            required
             minlength="2"
             maxlength="30"
+            required
           />
           <span class="popup__input-error popup__input-error_type_place"></span>
           <input
@@ -110,12 +108,7 @@
             required
           />
           <span class="popup__input-error popup__input-error_type_link"></span>
-          <button
-            type="submit"
-            class="popup__submit-button popup__submit-button_disabled"
-          >
-            Сохранить
-          </button>
+          <button type="submit" class="popup__submit-button">Сохранить</button>
         </form>
       </div>
     </div>
@@ -127,8 +120,9 @@
         <h2 class="popup__image-title"></h2>
       </div>
     </div>
+
     <script src="./scripts/initial-сards.js"></script>
-    <script src="./scripts/validate.js"></script>
     <script src="./scripts/index.js"></script>
+    <script src="./scripts/validate.js"></script>
   </body>
 </html>
