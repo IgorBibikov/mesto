@@ -16,6 +16,13 @@ const bigFotoTitle = document.querySelector('.popup__image-title');
 // Находим форму в DOM
 const formProfileElement = document.querySelector('.popup__form_type_profile');
 const formPlaceElement = document.querySelector('.popup__form_type_place');
+
+//Находим кнопку сабмит
+const formSubmitButton = formPlaceElement.querySelector(
+  '.popup__submit-button'
+);
+const invalidSubmitButtonClass = 'popup__submit-button_disabled';
+
 // Находим поля формы в DOM
 const profileNameInput = document.querySelector('.popup__input_type_name');
 const profileOccupationInput = document.querySelector(
@@ -29,7 +36,7 @@ const profileNameElement = document.querySelector('.profile__name');
 const profileOccupationElement = document.querySelector('.profile__subtitle');
 
 // Функция закрытия попап по ESC
-function doSomething(evt) {
+function handleEscClose(evt) {
   if (evt.code === 'Escape') {
     const popupOpened = document.querySelector('.popup_opened');
     closePopup(popupOpened);
@@ -38,20 +45,15 @@ function doSomething(evt) {
 //Функция открытия popup
 function openPopup(popup) {
   popup.classList.add('popup_opened');
-  document.addEventListener('keydown', doSomething);
+  document.addEventListener('keydown', handleEscClose);
 }
 
 // Функция закрытия popup
 function closePopup(popup) {
   popup.classList.remove('popup_opened');
-  document.removeEventListener('keydown', doSomething);
+  document.removeEventListener('keydown', handleEscClose);
 }
-// Функция деактивирования кнопки сабмит
-function disableSubmitButton() {
-  const submitButton = formPlaceElement.querySelector('.popup__submit-button');
-  submitButton.classList.add('popup__submit-button_disabled');
-  submitButton.disabled = true;
-}
+
 // Обработчик событий для открытия popup:
 buttonEditProfile.addEventListener('click', function () {
   profileNameInput.value = profileNameElement.textContent;
@@ -60,7 +62,7 @@ buttonEditProfile.addEventListener('click', function () {
 });
 buttonAddPlace.addEventListener('click', function () {
   openPopup(popupPlace);
-  disableSubmitButton();
+  disableButton(formSubmitButton, invalidSubmitButtonClass);
 });
 
 // Обработчик событий для закрытия popup по кнопке:
@@ -145,7 +147,7 @@ function handleFormSubmitPlace(evt) {
   addCard(card, cardsContainer);
   closePopup(popupPlace);
   formPlaceElement.reset();
-  disableSubmitButton();
+  disableButton(formSubmitButton, invalidSubmitButtonClass);
 }
 // Обработчик событий при отправке формы профиля:
 
