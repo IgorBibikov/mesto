@@ -1,3 +1,17 @@
+import { initialCards } from './initial-сards.js';
+import { Card } from './Card.js';
+import { FormValidator } from './FormValidator.js';
+
+const config = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  errorClassTemplate: '.popup__input-error_type_',
+  activeErrorClass: 'popup__input-error',
+  submitButtonSelector: '.popup__submit-button',
+  invalidSubmitButtonClass: 'popup__submit-button_disabled',
+  inputErrorClass: 'popup__input_type_error',
+};
+
 const buttonEditProfile = document.querySelector('.profile__edit-button');
 const buttonAddPlace = document.querySelector('.profile__add-button');
 
@@ -7,7 +21,7 @@ const popupPlace = document.querySelector('.popup_type_place');
 const popupImage = document.querySelector('.popup_type_image');
 const popups = document.querySelectorAll('.popup');
 
-const placeTemplate = document.querySelector('.place-template').content;
+// const placeTemplate = document.querySelector('.place-template');
 const cardsContainer = document.querySelector('.places');
 
 const bigFoto = document.querySelector('.popup__big-foto');
@@ -16,6 +30,13 @@ const bigFotoTitle = document.querySelector('.popup__image-title');
 // Находим форму в DOM
 const formProfileElement = document.querySelector('.popup__form_type_profile');
 const formPlaceElement = document.querySelector('.popup__form_type_place');
+
+// Создание экземпляра класса валидации формы профиля
+const profileFormValidator = new FormValidator(config, formProfileElement);
+profileFormValidator.enableValidation();
+// Создание экземпляра класса  валидации формы карточек
+const newCradFormValidator = new FormValidator(config, formPlaceElement);
+newCradFormValidator.enableValidation();
 
 //Находим кнопку сабмит
 const formSubmitButton = formPlaceElement.querySelector(
@@ -93,47 +114,61 @@ function handleFormSubmitProfile(evt) {
 // Обработчик событий при отправке формы профиля:
 formProfileElement.addEventListener('submit', handleFormSubmitProfile);
 
-// Функция создания карточек
-function createCard(card) {
-  const newCard = placeTemplate.querySelector('.place').cloneNode(true);
-  const placeTitle = newCard.querySelector('.place__title');
-  const placeFoto = newCard.querySelector('.place__foto');
-  const placeRemoveButtom = newCard.querySelector('.place__remove-button');
-  const imageButton = newCard.querySelector('.place__foto');
-  placeTitle.textContent = card.name;
-  placeFoto.setAttribute('src', card.link);
-  placeFoto.setAttribute('alt', `Фотография ${card.name}`);
-  placeRemoveButtom.addEventListener('click', hendleRemoveCard);
-  // ОТкрытие попап
-  imageButton.addEventListener('click', function () {
-    openPopup(popupImage);
-    bigFoto.setAttribute('src', card.link);
-    bigFoto.setAttribute('alt', `Фотография ${card.name}`);
-    bigFotoTitle.textContent = card.name;
-  });
-  newCard
-    .querySelector('.place__like')
-    .addEventListener('click', function (evt) {
-      evt.target.classList.toggle('place__like_active');
-    });
-  return newCard;
+// Функция открытия попап с картинкой
+function opemPopupBigImage(name, link) {
+  openPopup(popupImage);
+  bigFoto.setAttribute('src', link);
+  bigFoto.setAttribute('alt', `Фотография ${name}`);
+  bigFotoTitle.textContent = name;
 }
-//Функция добавления карточки
-function addCard(card, cardsContainer) {
-  const newCardElement = createCard(card);
-  cardsContainer.prepend(newCardElement);
-}
+//Добавление 6 первых карточек +
+initialCards.forEach((item) => {
+  // Создадим экземпляр карточки  +
+  const card = new Card(
+    item,
+    '.place-template',
+    opemPopupBigImage,
+    hendleAddLike,
+    hendleRemoveCard
+  );
+  // Создаём карточку и возвращаем наружу  +
+  const cardElement = card.generateCard();
 
-initialCards.forEach(function (data) {
-  addCard(data, cardsContainer);
+  // Добавляем в DOM  +
+  cardsContainer.append(cardElement);
 });
 
-// Функция удаления карточек
-function hendleRemoveCard(event) {
-  const button = event.target;
-  const place = button.closest('.place');
+//Функция добавления карточки  +
+function addCard(card, cardsContainer) {
+  const newCard = new Card(
+    card,
+    '.place-template',
+    opemPopupBigImage,
+    hendleAddLike,
+    hendleRemoveCard
+  );
+  const cardElement = newCard.generateCard();
+  cardsContainer.prepend(cardElement);
+}
+// Функция удаления карточек +
+function hendleRemoveCard(placeRemoveButtom) {
+  const place = placeRemoveButtom.closest('.place');
   place.remove();
 }
+// Функция добавления лайка +
+function hendleAddLike(placeLike) {
+  placeLike.classList.toggle('place__like_active');
+}
+
+// function addCard(card, cardsContainer) {
+//   const newCardElement = createCard(card);
+//   cardsContainer.prepend(newCardElement);
+// }
+// //Добавление 6 первых карточек
+// initialCards.forEach(function (data) {
+//   addCard(data, cardsContainer);
+// });
+
 // Функция «отправки» формы карточек
 function handleFormSubmitPlace(evt) {
   evt.preventDefault();
@@ -152,3 +187,9 @@ function handleFormSubmitPlace(evt) {
 // Обработчик событий при отправке формы профиля:
 
 formPlaceElement.addEventListener('submit', handleFormSubmitPlace);
+
+// Функция блокировки кнопки
+const disableButton = (submitButton, invalidSubmitButtonClass) => {
+  submitButton.classList.add(invalidSubmitButtonClass);
+  submitButton.disabled = true;
+};
