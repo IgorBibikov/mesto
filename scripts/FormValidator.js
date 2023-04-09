@@ -24,21 +24,21 @@ export class FormValidator {
     );
     if (!input.validity.valid) {
       this._showInputError(input);
-      input.classList.add(this._config.inputErrorClass);
     } else {
-      this._hideInputError();
-      input.classList.remove(this._config.inputErrorClass);
+      this._hideInputError(input);
     }
   }
-  // //Функция отображения ошибки
+  // //Отображение ошибки
   _showInputError(input) {
     this._errorTextElement.textContent = input.validationMessage;
     this._errorTextElement.classList.add(this._config.activeErrorClass);
+    input.classList.add(this._config.inputErrorClass);
   }
   // //Функция скрытия ошибки
-  _hideInputError() {
+  _hideInputError(input) {
     this._errorTextElement.classList.remove(this._config.activeErrorClass);
     this._errorTextElement.textContent = '';
+    input.classList.remove(this._config.inputErrorClass);
   }
   _hasInvalidInput() {
     return Array.from(this._inputList).some((input) => !input.validity.valid);
@@ -51,11 +51,8 @@ export class FormValidator {
       this._enableButton();
     }
   }
-  // // Функция слушателя событи отправки формы
+  // // Функция слушателя событи
   _setEventListerens() {
-    this._form.addEventListener('submit', (e) => {
-      e.preventDefault();
-    });
     this._inputList.forEach((input) => {
       input.addEventListener('input', (e) => {
         this._checkInputValidity(input);
@@ -66,5 +63,6 @@ export class FormValidator {
   // Функция проверки формы на валидность
   enableValidation() {
     this._setEventListerens();
+    this._disableButton();
   }
 }

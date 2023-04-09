@@ -1,17 +1,9 @@
 export class Card {
-  constructor(
-    data,
-    templateSelector,
-    opemPopupBigImage,
-    hendleAddLike,
-    hendleRemoveCard
-  ) {
+  constructor(data, templateSelector, opemPopupBigImage) {
     this._name = data.name;
     this._link = data.link;
     this._templateSelector = templateSelector;
     this._opemPopupBigImage = opemPopupBigImage;
-    this._hendleAddLike = hendleAddLike;
-    this._hendleRemoveCard = hendleRemoveCard;
   }
   // Получаем темплейт
   _getTemplate() {
@@ -35,6 +27,14 @@ export class Card {
     this._setEventListeners();
     return this._newCard;
   }
+  //Удаление карточки
+  _hendleRemoveCard() {
+    this._placeRemoveButtom.closest('.place').remove();
+  }
+  // Добавление лайка
+  _hendleAddLike() {
+    this._placeLike.classList.toggle('place__like_active');
+  }
   _setEventListeners() {
     //Добавление слушателя для открытия попап с картинкой
     this._imageButton.addEventListener('click', () => {
@@ -42,11 +42,11 @@ export class Card {
     });
     //Добавление слушателя для добавления лайка
     this._placeLike.addEventListener('click', () => {
-      this._hendleAddLike(this._placeLike);
+      this._hendleAddLike();
     });
     //Добавление слушателя для удаления карточек
     this._placeRemoveButtom.addEventListener('click', () => {
-      this._hendleRemoveCard(this._placeRemoveButtom);
+      this._hendleRemoveCard();
     });
   }
 }

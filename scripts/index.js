@@ -38,12 +38,6 @@ profileFormValidator.enableValidation();
 const newCradFormValidator = new FormValidator(config, formPlaceElement);
 newCradFormValidator.enableValidation();
 
-//Находим кнопку сабмит
-const formSubmitButton = formPlaceElement.querySelector(
-  '.popup__submit-button'
-);
-const invalidSubmitButtonClass = 'popup__submit-button_disabled';
-
 // Находим поля формы в DOM
 const profileNameInput = document.querySelector('.popup__input_type_name');
 const profileOccupationInput = document.querySelector(
@@ -83,7 +77,6 @@ buttonEditProfile.addEventListener('click', function () {
 });
 buttonAddPlace.addEventListener('click', function () {
   openPopup(popupPlace);
-  disableButton(formSubmitButton, invalidSubmitButtonClass);
 });
 
 // Обработчик событий для закрытия popup по кнопке:
@@ -121,53 +114,23 @@ function opemPopupBigImage(name, link) {
   bigFoto.setAttribute('alt', `Фотография ${name}`);
   bigFotoTitle.textContent = name;
 }
+//Функция создания карточки
+function createCard(item) {
+  const card = new Card(item, '.place-template', opemPopupBigImage);
+  const cardElement = card.generateCard();
+  return cardElement;
+}
 //Добавление 6 первых карточек +
 initialCards.forEach((item) => {
-  // Создадим экземпляр карточки  +
-  const card = new Card(
-    item,
-    '.place-template',
-    opemPopupBigImage,
-    hendleAddLike,
-    hendleRemoveCard
-  );
-  // Создаём карточку и возвращаем наружу  +
-  const cardElement = card.generateCard();
-
   // Добавляем в DOM  +
-  cardsContainer.append(cardElement);
+  cardsContainer.append(createCard(item));
 });
 
 //Функция добавления карточки  +
 function addCard(card, cardsContainer) {
-  const newCard = new Card(
-    card,
-    '.place-template',
-    opemPopupBigImage,
-    hendleAddLike,
-    hendleRemoveCard
-  );
-  const cardElement = newCard.generateCard();
-  cardsContainer.prepend(cardElement);
+  createCard(card);
+  cardsContainer.prepend(createCard(card));
 }
-// Функция удаления карточек +
-function hendleRemoveCard(placeRemoveButtom) {
-  const place = placeRemoveButtom.closest('.place');
-  place.remove();
-}
-// Функция добавления лайка +
-function hendleAddLike(placeLike) {
-  placeLike.classList.toggle('place__like_active');
-}
-
-// function addCard(card, cardsContainer) {
-//   const newCardElement = createCard(card);
-//   cardsContainer.prepend(newCardElement);
-// }
-// //Добавление 6 первых карточек
-// initialCards.forEach(function (data) {
-//   addCard(data, cardsContainer);
-// });
 
 // Функция «отправки» формы карточек
 function handleFormSubmitPlace(evt) {
@@ -182,14 +145,8 @@ function handleFormSubmitPlace(evt) {
   addCard(card, cardsContainer);
   closePopup(popupPlace);
   formPlaceElement.reset();
-  disableButton(formSubmitButton, invalidSubmitButtonClass);
+  newCradFormValidator.enableValidation();
 }
 // Обработчик событий при отправке формы профиля:
 
 formPlaceElement.addEventListener('submit', handleFormSubmitPlace);
-
-// Функция блокировки кнопки
-const disableButton = (submitButton, invalidSubmitButtonClass) => {
-  submitButton.classList.add(invalidSubmitButtonClass);
-  submitButton.disabled = true;
-};
