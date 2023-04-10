@@ -29,7 +29,8 @@ export class Card {
   }
   //Удаление карточки
   _hendleRemoveCard() {
-    this._placeRemoveButtom.closest('.place').remove();
+    this._newCard.remove();
+    this._newCard = null;
   }
   // Добавление лайка
   _hendleAddLike() {

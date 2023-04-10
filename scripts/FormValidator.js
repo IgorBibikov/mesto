@@ -28,6 +28,14 @@ export class FormValidator {
       this._hideInputError(input);
     }
   }
+  //Очистка формы и состояние кнопки
+  resetValidation() {
+    this._toggleButtonState();
+    this._inputList.forEach((input) => {
+      this._checkInputValidity(input);
+      this._hideInputError(input);
+    });
+  }
   // //Отображение ошибки
   _showInputError(input) {
     this._errorTextElement.textContent = input.validationMessage;
@@ -60,9 +68,9 @@ export class FormValidator {
       });
     });
   }
+
   // Функция проверки формы на валидность
   enableValidation() {
     this._setEventListerens();
-    this._disableButton();
   }
 }

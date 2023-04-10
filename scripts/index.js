@@ -73,9 +73,11 @@ function closePopup(popup) {
 buttonEditProfile.addEventListener('click', function () {
   profileNameInput.value = profileNameElement.textContent;
   profileOccupationInput.value = profileOccupationElement.textContent;
+  profileFormValidator.resetValidation();
   openPopup(popupProfile);
 });
 buttonAddPlace.addEventListener('click', function () {
+  newCradFormValidator.resetValidation();
   openPopup(popupPlace);
 });
 
@@ -145,7 +147,6 @@ function handleFormSubmitPlace(evt) {
   addCard(card, cardsContainer);
   closePopup(popupPlace);
   formPlaceElement.reset();
-  newCradFormValidator.enableValidation();
 }
 // Обработчик событий при отправке формы профиля:
 
