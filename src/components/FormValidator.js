@@ -8,7 +8,7 @@ export class FormValidator {
     );
   }
   //Включение НЕАКТИВНОГО состояния кнопки
-  _disableButton() {
+  disableButton() {
     this._submitButton.classList.add(this._config.invalidSubmitButtonClass);
     this._submitButton.disabled = true;
   }
@@ -47,7 +47,7 @@ export class FormValidator {
   //Функция изменения состояния кнопки
   _toggleButtonState() {
     if (this._hasInvalidInput()) {
-      this._disableButton();
+      this.disableButton();
     } else {
       this._enableButton();
     }
