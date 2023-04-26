@@ -8,7 +8,7 @@ export class FormValidator {
     );
   }
   //Включение НЕАКТИВНОГО состояния кнопки
-  disableButton() {
+  _disableButton() {
     this._submitButton.classList.add(this._config.invalidSubmitButtonClass);
     this._submitButton.disabled = true;
   }
@@ -47,7 +47,7 @@ export class FormValidator {
   //Функция изменения состояния кнопки
   _toggleButtonState() {
     if (this._hasInvalidInput()) {
-      this.disableButton();
+      this._disableButton();
     } else {
       this._enableButton();
     }
@@ -55,7 +55,7 @@ export class FormValidator {
   // // Функция слушателя событи
   _setEventListerens() {
     this._inputList.forEach((input) => {
-      input.addEventListener('input', (e) => {
+      input.addEventListener('input', () => {
         this._checkInputValidity(input);
         this._toggleButtonState();
       });
