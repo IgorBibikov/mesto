@@ -32,30 +32,19 @@ api
     userInfo.setUserInfo(name, occupation);
     profileAvatar.setAttribute('src', avatar);
   })
-  .then(() => {})
-  .catch((err) => {
-    console.error(`WARNING ${err}`);
-  });
-// Отображение карточек при первой загрузке страницы +1
-api
-  .getInitialCards()
-  .then((res) => {
-    return res.reverse();
-  })
-  .then((cards) => {
-    cards.forEach((res) => {
-      const card = {
-        name: res.name,
-        link: res.link,
-        likes: res.likes,
-        id: res._id,
-        userId: userId,
-        ownerId: res.owner._id,
-        likes: res.likes,
-      };
-
-      createCard(card);
-    });
+  // Отображение карточек при первой загрузке страницы (после получения userId )
+  .then(() => {
+    api
+      .getInitialCards()
+      .then((res) => {
+        return res.reverse();
+      })
+      .then((res) => {
+        section.renderItems(res);
+      })
+      .catch((err) => {
+        console.error(`WARNING ${err}`);
+      });
   })
   .catch((err) => {
     console.error(`WARNING ${err}`);
@@ -109,6 +98,7 @@ function handleCardClick(name, link) {
 function getCard(item) {
   const card = new Card(
     item,
+    userId,
     '.place-template',
     handleCardClick,
     (id) => {
@@ -118,6 +108,9 @@ function getCard(item) {
           .removeCard(id)
           .then(() => {
             card.hendleRemoveCard();
+          })
+          .then(() => {
+            popupWithConfirm.close();
           })
           .catch((err) => {
             console.error(`WARNING ${err}`);
@@ -168,10 +161,13 @@ function handleFormSubmitProfile(data) {
       userInfo.setUserInfo(res.name, res.about);
     })
     .then(() => {
-      popupWithFormProfile.renderLoading(true);
+      popupWithFormProfile.close();
     })
     .catch((err) => {
       console.error(`WARNING ${err}`);
+    })
+    .finally(() => {
+      popupWithFormProfile.renderLoading(true);
     });
 }
 
@@ -184,22 +180,16 @@ function handleFormSubmitPlace(data) {
       link: data.link,
     })
     .then((res) => {
-      const card = {
-        name: res.name,
-        link: res.link,
-        likes: res.likes,
-        id: res._id,
-        userId: userId,
-        ownerId: res.owner._id,
-      };
-      createCard(card);
+      createCard(res);
     })
     .then(() => {
-      popupWithFormPlace.renderLoading(true);
+      popupWithFormPlace.close();
     })
-
     .catch((err) => {
       console.error(`WARNING ${err}`);
+    })
+    .finally(() => {
+      popupWithFormPlace.renderLoading(true);
     });
 }
 // Функция «отправки» формы редактирования аватара
@@ -210,10 +200,14 @@ function handleFormSubmitAvatar(data) {
     .then((res) => {
       profileAvatar.setAttribute('src', res.avatar);
     })
-    .then(() => popupWithFormUpdate.renderLoading(true))
+
+    .then(() => {
+      popupWithFormUpdate.close();
+    })
     .catch((err) => {
       console.error(`WARNING ${err}`);
-    });
+    })
+    .finally(() => popupWithFormUpdate.renderLoading(true));
 }
 
 // Обработчик событий для открытия popup редактирования аватара:+++
@@ -224,18 +218,12 @@ buttonUpdateAvatar.addEventListener('click', () => {
 
 // Обработчик событий для открытия popup редактирования профиля:
 buttonEditProfile.addEventListener('click', () => {
-  api
-    .getProfileData()
-    .then((res) => {
-      const name = res.name;
-      const occupation = res.about;
-      popupWithFormProfile.setInputValues({ name, occupation });
-      profileFormValidator.resetValidation();
-      popupWithFormProfile.open();
-    })
-    .catch((err) => {
-      console.error(`WARNING ${err}`);
-    });
+  const data = userInfo.getUserInfo();
+  const name = data.userName;
+  const occupation = data.userOccupation;
+  popupWithFormProfile.setInputValues({ name, occupation });
+  profileFormValidator.resetValidation();
+  popupWithFormProfile.open();
 });
 // Обработчик событий для открытия popup добавления карточки:
 buttonAddPlace.addEventListener('click', () => {

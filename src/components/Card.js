@@ -1,6 +1,7 @@
 export class Card {
   constructor(
     data,
+    userId,
     templateSelector,
     handleCardClick,
     handleRemoveIconClick,
@@ -13,9 +14,9 @@ export class Card {
     this._handleRemoveIconClick = handleRemoveIconClick;
     this._hendleLikeClick = hendleLikeClick;
     this._likes = data.likes;
-    this._cardId = data.id;
-    this._userId = data.userId;
-    this._ownerId = data.ownerId;
+    this._cardId = data._id;
+    this._userId = userId;
+    this._ownerId = data.owner._id;
   }
   // Получаем темплейт
   _getTemplate() {
@@ -93,8 +94,6 @@ export class Card {
     //Добавление слушателя для удаления карточек
     this._placeRemoveButtom.addEventListener('click', () => {
       this._handleRemoveIconClick(this._cardId);
-
-      // this._hendleRemoveCard();
     });
   }
 }
