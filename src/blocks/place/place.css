@@ -1,6 +1,7 @@
 .place {
   width: 282px;
-  min-height: 355px;
+  /* min-height: 355px; */
+  max-height: 361px;
   object-fit: contain;
   background: #ffffff;
   border-radius: 10px;

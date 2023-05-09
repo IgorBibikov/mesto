@@ -4,6 +4,9 @@ export class Popup {
     this._closeButton = this._popupElement.querySelector(
       '.popup__close-button'
     );
+    this._submitButton = this._popupElement.querySelector(
+      '.popup__submit-button'
+    );
     this._handleEscClose = this._handleEscClose.bind(this);
   }
   open() {
@@ -22,6 +25,13 @@ export class Popup {
   _handleOverlayClose(evt) {
     if (evt.target === this._popupElement) {
       this.close();
+    }
+  }
+  renderLoading(isLoading) {
+    if (isLoading) {
+      this._submitButton.textContent = 'Сохранение';
+    } else {
+      this._submitButton.textContent = 'Сохранение...';
     }
   }
   setEventListeners() {
